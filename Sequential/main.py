@@ -21,13 +21,14 @@ img = Image.new("RGB", (WIDTH, HEIGHT)) # Gera nova imagem com tamanho WIDTH X H
 # Laço que percorre todos os pixels da imagem
 for y in range(HEIGHT):
     # Mapeia a parte imaginária de z para a escala da imagem
-    imag = y * (maxY - minY) / (HEIGHT - 1)  + minY 
+    imag = y * (maxY - minY) / HEIGHT  + minY 
     for x in range(WIDTH):
         # Mapeia a parte real de z para a escala da imagem
-        real = x * (maxX - minX) / (WIDTH - 1)  + minX
+        real = x * (maxX - minX) / WIDTH  + minX
         # Calcula a cor do pixel na coordenada z = real + imag * 1j
         color = calc_pixel(real, imag)
         # Colore o pixel
         img.putpixel((x, y), (color % 255 * 16, color % 255 * 16, color % 255 * 16))
-  
+
 img.show() # Abre o fractal em .png
+#img.save("mandelbrot.png")
