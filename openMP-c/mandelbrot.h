@@ -14,8 +14,8 @@ Senac - Arquiteturas Paralelas e Distribuídas
 
 // Estrutura para definição de número complexo
 typedef struct {
-    float real;
-    float imag;
+    double real;
+    double imag;
 } complex;
 
 // Função que retorna valor de cor para um pixel do conjunto de Mandelbrot
@@ -24,7 +24,7 @@ int calc_pixel(complex c) {
     int count;
     complex z;
 
-    float temp, lengthsq;
+    double temp, lengthsq;
 
     z.real = 0; 
 	z.imag = 0;
