@@ -14,14 +14,14 @@ Senac - Arquiteturas Paralelas e Distribuídas
 #include <omp.h>
 
 // Constantes
-int WIDTH = 512 * 2;  // Largura da imagem em pixels
-int HEIGHT = 512 * 2; // Altura da imagem em pixels
-int THREADS = 2; // Número de threads (MAX 12)
+#define WIDTH 512 // Largura da imagem em pixels
+#define HEIGHT 512 // Altura da imagem em pixels
+#define THREADS 2 // Número de threads (MAX 12)
 
-double minX = -2.0; // Origem eixo x
-double maxX = 2.0;  // Máximo x positivo
-double minY = -2.0; // Origem eixo y
-double maxY = 2.0;  // Máximo y positivo
+const double minX = -2.0; // Origem eixo x
+const double maxX = 2.0;  // Máximo x positivo
+const double minY = -2.0; // Origem eixo y
+const double maxY = 2.0;  // Máximo y positivo
 
 double scale_real, scale_imag, color;
 
@@ -43,15 +43,16 @@ int main(int argc, char *argv[])
 
     // Inicia o paralelismo para o loop for
     #pragma omp parallel for default(shared)\
-                            private(z, color)\
+                            private(z, y, color)\
                             num_threads(THREADS)\
-    
+                            schedule(static,1)\
+
         for (x = 0; x < WIDTH; x++) {
             // Mapeia a parte real de z para a escala da imagem
             z.real = minX + ((double)x * scale_real);
 
             for (y = 0; y < HEIGHT; y++) {
-
+                
                 // Mapeia a parte imaginária de z para a escala da imagem
                 z.imag = minY + ((double)y * scale_imag);
 

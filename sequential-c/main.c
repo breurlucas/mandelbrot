@@ -13,8 +13,8 @@ Senac - Arquiteturas Paralelas e Distribuídas
 #include <png.h>
 
 // Constantes
-int WIDTH = 512 * 2;  // Largura da imagem em pixels
-int HEIGHT = 512 * 2; // Altura da imagem em pixels
+#define WIDTH 512 // Largura da imagem em pixels
+#define HEIGHT 512 // Altura da imagem em pixels
 
 double minX = -2.0; // Origem eixo x
 double maxX = 2.0;  // Máximo x positivo
