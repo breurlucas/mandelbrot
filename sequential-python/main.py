@@ -5,6 +5,7 @@
 # Importações
 from mandelbrot import calc_pixel, MAX_I # Importa a função calc_pixel do script mandelbrot.py
 from PIL import Image # Importa a geração de imagens da biblioteca Pillow (PIL)
+import time
 
 # Constantes
 WIDTH = 512  # Largura da imagem em pixels
@@ -18,6 +19,8 @@ maxY = 2.0  # Máximo y positivo
 
 img = Image.new("RGB", (WIDTH, HEIGHT)) # Gera nova imagem com tamanho WIDTH X HEIGHT
 
+start_time = time.time()
+
 # Laço que percorre todos os pixels da imagem
 for y in range(HEIGHT):
     # Mapeia a parte imaginária de z para a escala da imagem
@@ -30,5 +33,7 @@ for y in range(HEIGHT):
         # Colore o pixel
         img.putpixel((x, y), (color % 255 * 16, color % 255 * 16, color % 255 * 16))
 
-img.show() # Abre o fractal em .png
+print("Execution time [s]: %s" % (time.time() - start_time))
+
+#img.show() # Abre o fractal em .png
 #img.save("mandelbrot.png")
