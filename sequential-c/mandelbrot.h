@@ -10,23 +10,27 @@ Senac - Arquiteturas Paralelas e Distribuídas
 #include <malloc.h>
 #include <png.h>
 
-#define MAX_I 256
+#define MAX_I 256 // Número máximo de interações
 
+// Estrutura para definição de número complexo
 typedef struct {
     float real;
     float imag;
 } complex;
 
+// Função que retorna valor de cor para um pixel do conjunto de Mandelbrot
 int calc_pixel(complex c) {
 
-    int count, max;
+    int count;
     complex z;
 
     float temp, lengthsq;
 
-    z.real = 0; z.imag = 0;
+    z.real = 0; 
+	z.imag = 0;
     count = 0;
 
+	// Iterações continuam até que a magnitude de z seja maior que 2 ou o número de iterações alcance um limite arbitrário definido por MAX_I
     do {
         temp = z.real * z.real - z.imag * z.imag + c.real;
         z.imag = 2 * z.real * z.imag + c.imag;
@@ -38,31 +42,31 @@ int calc_pixel(complex c) {
     return count;
 }
 
-// LibPNG example
-// A.Greensted
-// http://www.labbookpages.co.uk
-inline void setRGB(png_byte *ptr, float val)
+/* The code below is from:
+
+	LibPNG example
+	A.Greensted
+	http://www.labbookpages.co.uk
+*/
+
+void setRGB(png_byte *ptr, double val)
 {
 	int v = (int)(val * 767);
-	if (v < 0) v = 0;
-	if (v > 767) v = 767;
-	int offset = v % 256;
+	int offset = v % 256 * 2;
 
-	if (v<256) {
-		ptr[0] = 0; ptr[1] = 0; ptr[2] = offset;
+	if (v < 256) {
+		ptr[0] = offset; ptr[1] = offset; ptr[2] = offset;
 	}
-	else if (v<512) {
-		ptr[0] = 0; ptr[1] = offset; ptr[2] = 255-offset;
+	else if (v < 512) {
+		ptr[0] = offset; ptr[1] = offset; ptr[2] = offset;
 	}
 	else {
-		ptr[0] = offset; ptr[1] = 255-offset; ptr[2] = 0;
+		ptr[0] = 255-offset; ptr[1] = 255-offset; ptr[2] = 255-offset;
 	}
 }
 
-// LibPNG example
-// A.Greensted
-// http://www.labbookpages.co.uk
-int writeImage(char* filename, int width, int height, float *buffer, char* title)
+
+int writeImage(char* filename, int width, int height, double *buffer, char* title)
 {
 	int code = 0;
 	FILE *fp = NULL;

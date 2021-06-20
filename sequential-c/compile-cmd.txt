@@ -1,0 +1,2 @@
+gcc main.c mandelbrot.h -lpng -o mandelbrot
+./mandelbrot mandelbrot.png

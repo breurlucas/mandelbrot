@@ -5,7 +5,7 @@ Senac - Arquiteturas Paralelas e Distribuídas
 */
 
 // Importações
-#include "mandelbrot.h" // Importa a função calc_pixel do script mandelbrot.c
+#include "mandelbrot.h"
 #include <stdio.h>
 #include <math.h>
 #include <malloc.h>
@@ -20,37 +20,36 @@ double maxX = 2.0;  // Máximo x positivo
 double minY = -2.0; // Origem eixo y
 double maxY = 2.0;  // Máximo y positivo
 
-int x, y, color;
-double scale_real, scale_imag;
+int x, y;
+double scale_real, scale_imag, color;
 
 complex z;
 
 int main(int argc, char *argv[])
 {    
-    if (argc != 2) {
-		fprintf(stderr, "Output file name was not specified\n");
-		return 1;
-	}
-
-    z.real = x * (maxX - minX) / WIDTH  + minX; 
-    z.imag = y * (maxY - minY) / HEIGHT  + minY;
+    z.real = x * (maxX - minX) / WIDTH  + minX; // Mapeia a parte real de z para a escala da imagem
+    z.imag = y * (maxY - minY) / HEIGHT  + minY; // Mapeia a parte imaginária de z para a escala da imagem
 
     scale_real = (maxX - minX) / WIDTH;
     scale_imag = (maxY - minY) / HEIGHT;
 
-    float *buffer = (float *) malloc(WIDTH * HEIGHT * sizeof(float));
+    // Buffer de armazenamento dos valores de cor calculados para todos os pixels da imagem
+    double *buffer = (double *) malloc(WIDTH * HEIGHT * sizeof(double));
 
     for (x = 0; x < WIDTH; x++) {
         for (y = 0; y < HEIGHT; y++) {
             z.real = minX + ((double)x * scale_real);
             z.imag = minY + ((double)y * scale_imag);
             color = calc_pixel(z);
-            buffer[y * WIDTH + x] = color;
+            // Armazena os valores de cor concatenando as colunas em sequência
+            buffer[y * WIDTH + x] = ((double)MAX_I - color) / (double)MAX_I;
         }
     }
     
+    // A função writeImage recebe o buffer e mapeia as cores em um arquivo png
     int png = writeImage(argv[1], WIDTH, HEIGHT, buffer, "mandelbrot");
 
+    // Liberação da memória
 	free(buffer);
 
 	return png;
