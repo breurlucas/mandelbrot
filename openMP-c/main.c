@@ -7,6 +7,7 @@ Senac - Arquiteturas Paralelas e Distribuídas
 // Importações
 #include "mandelbrot.h"
 #include <stdio.h>
+#include <time.h>
 #include <math.h>
 #include <malloc.h>
 #include <png.h>
@@ -29,6 +30,8 @@ complex z;
 
 int main(int argc, char *argv[])
 {    
+    clock_t t;
+
     z.real = x * (maxX - minX) / WIDTH  + minX; // Mapeia a parte real de z para a escala da imagem
     z.imag = y * (maxY - minY) / HEIGHT  + minY; // Mapeia a parte imaginária de z para a escala da imagem
 
@@ -37,6 +40,8 @@ int main(int argc, char *argv[])
 
     // Buffer de armazenamento dos valores de cor calculados para todos os pixels da imagem
     double *buffer = (double *) malloc(WIDTH * HEIGHT * sizeof(double));
+
+    t = clock(); // Tempo inicial
 
     omp_set_num_threads(THREADS); // Define o número de threads
     #pragma omp parallel for collapse(2) // Inicia o paralelismo unindo os dois loops independentes
@@ -49,6 +54,10 @@ int main(int argc, char *argv[])
                 buffer[y * WIDTH + x] = ((double)MAX_I - color) / (double)MAX_I;
             }
         }
+
+    t = clock() - t; // Tempo final
+    double time = ((double)t)/CLOCKS_PER_SEC; // Dividir pelo clock por segundo
+    printf("Execution time [s]: %f \n", time);
     
     // A função writeImage recebe o buffer e mapeia as cores em um arquivo png
     int png = writeImage(argv[1], WIDTH, HEIGHT, buffer, "mandelbrot");
