@@ -13,8 +13,8 @@ Senac - Arquiteturas Paralelas e Distribuídas
 #include <png.h>
 
 // Constantes
-#define WIDTH 512 // Largura da imagem em pixels
-#define HEIGHT 512 // Altura da imagem em pixels
+#define WIDTH 4096 // Largura da imagem em pixels
+#define HEIGHT 4096 // Altura da imagem em pixels
 
 double minX = -2.0; // Origem eixo x
 double maxX = 2.0;  // Máximo x positivo
@@ -59,12 +59,14 @@ int main(int argc, char *argv[])
     printf("Execution time [s]: %f \n", time);
     
     // A função writeImage recebe o buffer e mapeia as cores em um arquivo png
-    int png = writeImage(argv[1], WIDTH, HEIGHT, buffer, "mandelbrot");
+    // int png = writeImage(argv[1], WIDTH, HEIGHT, buffer, "mandelbrot");
 
     // Liberação da memória
 	free(buffer);
 
-	return png;
+	// return png;
+
+    return 1;
 }
 
 
