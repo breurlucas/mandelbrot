@@ -8,8 +8,8 @@ from PIL import Image # Importa a geração de imagens da biblioteca Pillow (PIL
 import time
 
 # Constantes
-WIDTH = 512  # Largura da imagem em pixels
-HEIGHT = 512 # Altura da imagem em pixels
+WIDTH = 4096  # Largura da imagem em pixels
+HEIGHT = 4096 # Altura da imagem em pixels
 
 minX = -2.0 # Origem eixo x
 maxX = 2.0  # Máximo x positivo
