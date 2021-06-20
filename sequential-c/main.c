@@ -13,15 +13,14 @@ Senac - Arquiteturas Paralelas e Distribuídas
 #include <png.h>
 
 // Constantes
-int WIDTH = 512;  // Largura da imagem em pixels
-int HEIGHT = 512; // Altura da imagem em pixels
+int WIDTH = 512 * 2;  // Largura da imagem em pixels
+int HEIGHT = 512 * 2; // Altura da imagem em pixels
 
 double minX = -2.0; // Origem eixo x
 double maxX = 2.0;  // Máximo x positivo
 double minY = -2.0; // Origem eixo y
 double maxY = 2.0;  // Máximo y positivo
 
-int x, y;
 double scale_real, scale_imag, color;
 
 complex z;
@@ -29,9 +28,6 @@ complex z;
 int main(int argc, char *argv[])
 {    
     clock_t t;
-
-    z.real = x * (maxX - minX) / WIDTH  + minX; // Mapeia a parte real de z para a escala da imagem
-    z.imag = y * (maxY - minY) / HEIGHT  + minY; // Mapeia a parte imaginária de z para a escala da imagem
 
     scale_real = (maxX - minX) / WIDTH;
     scale_imag = (maxY - minY) / HEIGHT;
@@ -41,11 +37,18 @@ int main(int argc, char *argv[])
 
     t = clock(); // Tempo inicial
 
-    for (x = 0; x < WIDTH; x++) {
-        for (y = 0; y < HEIGHT; y++) {
+    for (int x = 0; x < WIDTH; x++) {
+            
+            // Mapeia a parte real de z para a escala da imagem
             z.real = minX + ((double)x * scale_real);
+
+        for (int y = 0; y < HEIGHT; y++) {
+
+            // Mapeia a parte imaginária de z para a escala da imagem
             z.imag = minY + ((double)y * scale_imag);
+
             color = calc_pixel(z);
+
             // Armazena os valores de cor concatenando as colunas em sequência
             buffer[y * WIDTH + x] = ((double)MAX_I - color) / (double)MAX_I;
         }

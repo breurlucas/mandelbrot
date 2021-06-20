@@ -14,26 +14,24 @@ Senac - Arquiteturas Paralelas e Distribuídas
 #include <omp.h>
 
 // Constantes
-int WIDTH = 512;  // Largura da imagem em pixels
-int HEIGHT = 512; // Altura da imagem em pixels
-int THREADS = 2; // Número de threads
+int WIDTH = 512 * 2;  // Largura da imagem em pixels
+int HEIGHT = 512 * 2; // Altura da imagem em pixels
+int THREADS = 2; // Número de threads (MAX 12)
 
 double minX = -2.0; // Origem eixo x
 double maxX = 2.0;  // Máximo x positivo
 double minY = -2.0; // Origem eixo y
 double maxY = 2.0;  // Máximo y positivo
 
-int x, y;
 double scale_real, scale_imag, color;
+
+int x, y;
 
 complex z;
 
 int main(int argc, char *argv[])
 {    
     clock_t t;
-
-    z.real = x * (maxX - minX) / WIDTH  + minX; // Mapeia a parte real de z para a escala da imagem
-    z.imag = y * (maxY - minY) / HEIGHT  + minY; // Mapeia a parte imaginária de z para a escala da imagem
 
     scale_real = (maxX - minX) / WIDTH;
     scale_imag = (maxY - minY) / HEIGHT;
@@ -43,13 +41,22 @@ int main(int argc, char *argv[])
 
     t = clock(); // Tempo inicial
 
-    omp_set_num_threads(THREADS); // Define o número de threads
-    #pragma omp parallel for collapse(2) // Inicia o paralelismo unindo os dois loops independentes
+    // Inicia o paralelismo para o loop for
+    #pragma omp parallel for default(shared)\
+                            private(z, color)\
+                            num_threads(THREADS)\
+    
         for (x = 0; x < WIDTH; x++) {
+            // Mapeia a parte real de z para a escala da imagem
+            z.real = minX + ((double)x * scale_real);
+
             for (y = 0; y < HEIGHT; y++) {
-                z.real = minX + ((double)x * scale_real);
+
+                // Mapeia a parte imaginária de z para a escala da imagem
                 z.imag = minY + ((double)y * scale_imag);
+
                 color = calc_pixel(z);
+
                 // Armazena os valores de cor concatenando as colunas em sequência
                 buffer[y * WIDTH + x] = ((double)MAX_I - color) / (double)MAX_I;
             }
